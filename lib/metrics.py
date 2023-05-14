@@ -34,7 +34,7 @@ class MetricsReport:
         else:
             raise "Unknown TaskType!"
 
-    def get_splits_names(self) -> List[str] :
+    def get_splits_names(self) -> List[str]:
         return self._res.keys()
 
     def get_metrics_names(self) -> List[str]:
