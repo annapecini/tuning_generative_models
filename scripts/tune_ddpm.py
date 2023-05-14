@@ -1,6 +1,8 @@
 import subprocess
 import sys
-sys.path.append('/content/gdrive/MyDrive/tab-ddpm/')
+import os
+from pathlib import Path
+sys.path.append(os.path.join(Path(__file__).parents[1], ''))
 import lib
 import os
 import optuna
@@ -84,7 +86,7 @@ def objective(trial):
 
     lib.dump_config(base_config, exps_path / 'config.toml')
 
-    subprocess.run(['python3.9', f'{pipeline}', '--config', f'{exps_path / "config.toml"}', '--train', '--change_val'], check=True)
+    subprocess.run(['python', f'{pipeline}', '--config', f'{exps_path / "config.toml"}', '--train', '--change_val'], check=True)
 
     n_datasets = 5
     score = 0.0
@@ -93,7 +95,7 @@ def objective(trial):
         base_config['sample']['seed'] = sample_seed
         lib.dump_config(base_config, exps_path / 'config.toml')
         
-        subprocess.run(['python3.9', f'{pipeline}', '--config', f'{exps_path / "config.toml"}', '--sample', '--eval', '--change_val'], check=True)
+        subprocess.run(['python', f'{pipeline}', '--config', f'{exps_path / "config.toml"}', '--sample', '--eval', '--change_val'], check=True)
 
         report_path = str(Path(base_config['parent_dir']) / f'results_{args.eval_model}.json')
         report = lib.load_json(report_path)
@@ -122,8 +124,8 @@ os.makedirs(parent_path / f'{prefix}_best', exist_ok=True)
 lib.dump_config(best_config, best_config_path)
 lib.dump_json(optuna.importance.get_param_importances(study), parent_path / f'{prefix}_best/importance.json')
 
-subprocess.run(['python3.9', f'{pipeline}', '--config', f'{best_config_path}', '--train', '--sample'], check=True)
+subprocess.run(['python', f'{pipeline}', '--config', f'{best_config_path}', '--train', '--sample'], check=True)
 
 if args.eval_seeds:
     best_exp = str(parent_path / f'{prefix}_best/config.toml')
-    subprocess.run(['python3.9', f'{eval_seeds}', '--config', f'{best_exp}', '10', "ddpm", eval_type, args.eval_model, '5'], check=True)
+    subprocess.run(['python', f'{eval_seeds}', '--config', f'{best_exp}', '10', "ddpm", eval_type, args.eval_model, '5'], check=True)

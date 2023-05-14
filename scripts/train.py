@@ -4,7 +4,8 @@ import os
 import numpy as np
 import zero
 import sys
-sys.path.append('/content/gdrive/MyDrive/tab-ddpm/')
+from pathlib import Path
+sys.path.append(os.path.join(Path(__file__).parents[1], ''))
 from tab_ddpm import GaussianMultinomialDiffusion
 from utils_train import get_model, make_dataset, update_ema
 import lib

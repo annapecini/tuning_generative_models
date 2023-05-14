@@ -1,7 +1,10 @@
 import optuna
 import sys
-sys.path.append('/content/gdrive/MyDrive/tab-ddpm/')
+import os
+from pathlib import Path
+sys.path.append(os.path.join(Path(__file__).parents[1], ''))
 
+from typing import List
 import lib
 import argparse
 from eval_catboost import train_catboost
@@ -29,7 +32,7 @@ def _suggest_optional(trial: optuna.trial.Trial, distribution: str, label: str, 
     else:
         return 0.0
 
-def _suggest_mlp_layers(trial: optuna.trial.Trial, mlp_d_layers: list[int]):
+def _suggest_mlp_layers(trial: optuna.trial.Trial, mlp_d_layers: List[int]):
 
     min_n_layers, max_n_layers = mlp_d_layers[0], mlp_d_layers[1]
     d_min, d_max = mlp_d_layers[2], mlp_d_layers[3]
@@ -68,7 +71,7 @@ def suggest_catboost_params(trial):
     params["bagging_temperature"] = trial.suggest_uniform("bagging_temperature", 0.0, 1.0)
     params["leaf_estimation_iterations"] = trial.suggest_int("leaf_estimation_iterations", 1, 10)
 
-    params = params | {
+    params = params or {
         "iterations": 2000,
         "early_stopping_rounds": 50,
         "od_pval": 0.001,
