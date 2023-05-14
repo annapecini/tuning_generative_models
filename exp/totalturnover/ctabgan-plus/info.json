@@ -1,0 +1,10 @@
+{
+    "name": "Total Turnover",
+    "id": "turnover--default",
+    "task_type": "regression",
+    "n_num_features": 9,
+    "n_cat_features": 2,
+    "train_size": 996,
+    "val_size": 332,
+    "test_size": 333
+}

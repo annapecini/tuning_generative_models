@@ -1,0 +1,10 @@
+{
+    "name": "Metro Traffic",
+    "id": "metro--default",
+    "task_type": "regression",
+    "n_num_features": 5,
+    "n_cat_features": 4,
+    "train_size": 9147,
+    "val_size": 3049,
+    "test_size": 3050
+}
