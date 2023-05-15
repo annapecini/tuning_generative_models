@@ -10,6 +10,8 @@ import lib
 
 def to_good_ohe(ohe, X):
     indices = np.cumsum([0] + ohe._n_features_outs)
+    print("Features: ", ohe._n_features_outs)
+    # indices = np.cumsum([0] + len(ohe.get_feature_names_out()))
     Xres = []
     for i in range(1, len(indices)):
         x_ = np.max(X[:, indices[i - 1]:indices[i]], axis=1)
@@ -130,8 +132,8 @@ def sample(
         # _, _, cat_encoder = lib.cat_encode({'train': X_cat_real}, T_dict['cat_encoding'], y_real, T_dict['seed'], True)
         if T_dict['cat_encoding'] == 'one-hot':
             X_gen[:, num_numerical_features:] = to_good_ohe(D.cat_transform.steps[0][1], X_num_[:, num_numerical_features:])
-        # X_cat = D.cat_transform.inverse_transform(X_gen[:, num_numerical_features:])
-        X_cat = X_gen[:, num_numerical_features:]
+        X_cat = D.cat_transform.inverse_transform(X_gen[:, num_numerical_features:])
+        # X_cat = X_gen[:, num_numerical_features:]
 
     if num_numerical_features_ != 0:
         # _, normalize = lib.normalize({'train' : X_num_real}, T_dict['normalization'], T_dict['seed'], True)

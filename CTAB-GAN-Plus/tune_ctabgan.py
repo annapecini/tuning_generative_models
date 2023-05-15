@@ -2,15 +2,14 @@ from multiprocessing.sharedctypes import RawValue
 from random import random
 import tempfile
 import subprocess
-
+import os
 import sys
-sys.path.append('/content/gdrive/MyDrive/tab-ddpm/')
+from pathlib import Path
+sys.path.append(os.path.join(Path(__file__).parents[1], ''))
 
 import lib
-import os
 import optuna
 import argparse
-from pathlib import Path
 from train_sample_ctabganp import train_ctabgan, sample_ctabgan
 from scripts.eval_catboost import train_catboost
 
@@ -48,7 +47,7 @@ def objective(trial):
     d_layers = d_first + d_middle + d_last
     ####
 
-    steps = trial.suggest_categorical('steps', [1000, 5000, 10000]) #[1000, 5000, 10000]
+    steps = trial.suggest_categorical('steps', [10, 20]) #[1000, 5000, 10000]
     # steps = trial.suggest_categorical('steps', [10])
     batch_size = 2 ** trial.suggest_int('batch_size', 9, 11)
     random_dim = 2 ** trial.suggest_int('random_dim', 4, 7)
@@ -98,7 +97,7 @@ def objective(trial):
                 "num_nan_policy": None,
                 "cat_nan_policy": None,
                 "cat_min_frequency": None,
-                "cat_encoding": None,
+                "cat_encoding": "one-hot",
                 "y_policy": "default"
             }
             metrics = train_catboost(
@@ -119,7 +118,7 @@ study = optuna.create_study(
     sampler=optuna.samplers.TPESampler(seed=0),
 )
 
-study.optimize(objective, n_trials=30, show_progress_bar=True)
+study.optimize(objective, n_trials=2, show_progress_bar=True)
 
 os.makedirs(f"exp/{Path(real_data_path).name}/ctabgan-plus/", exist_ok=True)
 config = {
@@ -137,7 +136,7 @@ config = {
             "num_nan_policy": None,
             "cat_nan_policy": None,
             "cat_min_frequency": None,
-            "cat_encoding": None,
+            "cat_encoding": "one-hot",
             "y_policy": "default"
         },
     }
@@ -153,5 +152,5 @@ train_ctabgan(
 
 lib.dump_config(config, config["parent_dir"]+"config.toml")
 
-subprocess.run(['python3.9', "scripts/eval_seeds.py", '--config', f'{config["parent_dir"]+"config.toml"}',
+subprocess.run(['python', "scripts/eval_seeds.py", '--config', f'{config["parent_dir"]+"config.toml"}',
                 '10', "ctabgan-plus", eval_type, "catboost", "5"], check=True)

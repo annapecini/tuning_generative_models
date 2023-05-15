@@ -2,12 +2,12 @@ import argparse
 import subprocess
 import tempfile
 import sys
-sys.path.append('/content/gdrive/MyDrive/tab-ddpm/')
-import lib
 import os
 import shutil
 from pathlib import Path
+sys.path.append(os.path.join(Path(__file__).parents[1], ''))
 from copy import deepcopy
+import lib
 
 from scripts.eval_catboost import train_catboost
 from scripts.eval_mlp import train_mlp
@@ -53,7 +53,7 @@ def eval_seeds(
             temp_config['sample']['seed'] = sample_seed
             lib.dump_config(temp_config, dir_ / "config.toml")
             if eval_type != 'real' and n_datasets > 1:
-                subprocess.run(['python3.9', f'{pipeline[sampling_method]}', '--config', f'{str(dir_ / "config.toml")}', '--sample'], check=True)
+                subprocess.run(['python', f'{pipeline[sampling_method]}', '--config', f'{str(dir_ / "config.toml")}', '--sample'], check=True)
 
             T_dict = deepcopy(raw_config['eval']['T'])
             for seed in range(n_seeds):
@@ -87,7 +87,7 @@ def eval_seeds(
     res = metrics_seeds_report.print_result()
     if os.path.exists(parent_dir/ f"eval_{model_type}.json"):
         eval_dict = lib.load_json(parent_dir / f"eval_{model_type}.json")
-        eval_dict = eval_dict | {eval_type: res}
+        eval_dict = eval_dict or {eval_type: res}
     else:
         eval_dict = {eval_type: res}
     

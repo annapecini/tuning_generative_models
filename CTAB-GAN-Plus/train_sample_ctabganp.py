@@ -29,7 +29,7 @@ def train_ctabgan(
     
     X = lib.concat_to_pd(X_num_train, X_cat_train, y_train)
 
-    X.columns = [str(_) for _ in X.columns]
+    X.columns = [str(_) for _ in X.columns]    
 
     ctabgan_params = lib.load_json("CTAB-GAN-Plus/columns.json")[real_data_path.name]
     train_params["batch_size"] = min(y_train.shape[0], train_params["batch_size"])
@@ -84,10 +84,12 @@ def sample_ctabgan(
         synthesizer.synthesizer.generator = synthesizer.synthesizer.generator.to(device)
     gen_data = synthesizer.generate_samples(num_samples, seed)
 
+    print("Sampled data: ", gen_data.head())
     y = gen_data['y'].values
-    if len(np.unique(y)) == 1:
-        y[0] = 0
-        y[1] = 1
+
+    # if len(np.unique(y)) == 1:
+    #    y[0] = 0
+    #    y[1] = 1
 
     X_cat = gen_data[cat_features].drop('y', axis=1, errors="ignore").values if len(cat_features) else None
     X_num = gen_data.values[:, :X_num_train.shape[1]] if X_num_train is not None else None

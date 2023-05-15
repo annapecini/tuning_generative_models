@@ -324,9 +324,9 @@ def cat_encode(
             handle_unknown='ignore', sparse=False, dtype=np.float32 # type: ignore[code]
         )
         encoder = make_pipeline(ohe)
-
-        # encoder.steps.append(('ohe', ohe))
+        print("X_train: ", X['train'])
         encoder.fit(X['train'])
+        # encoder.steps.append(('ohe', ohe))
         X = {k: encoder.transform(v) for k, v in X.items()}
     elif encoding == 'counter':
         assert y_train is not None
@@ -443,6 +443,7 @@ def transform_dataset(
             X_cat = None
 
     y, y_info = build_target(dataset.y, transformations.y_policy, dataset.task_type)
+
 
     dataset = replace(dataset, X_num=X_num, X_cat=X_cat, y=y, y_info=y_info)
     dataset.num_transform = num_transform

@@ -379,14 +379,14 @@ class CTABGANSynthesizer:
         data_dim = self.transformer.output_dim
         self.cond_generator = Cond(train_data, self.transformer.output_info)
         		
-        sides = [4, 8, 16, 24, 32]
+        sides = [4, 8, 16, 24, 32, 64, 128]
         col_size_d = data_dim + self.cond_generator.n_opt
         for i in sides:
             if i * i >= col_size_d:
                 self.dside = i
                 break
         
-        sides = [4, 8, 16, 24, 32]
+        sides = [4, 8, 16, 24, 32, 64, 128]
         col_size_g = data_dim
         for i in sides:
             if i * i >= col_size_g:
@@ -551,10 +551,10 @@ class CTABGANSynthesizer:
    
     @torch.no_grad()
     def sample(self, n, seed=0):
-        print(n)
+        print("n: ", n)
         torch.manual_seed(seed)
         torch.cuda.manual_seed(seed)
-        sample_batch_size = 8092
+        sample_batch_size = 50
         self.generator.eval()
 
         output_info = self.transformer.output_info

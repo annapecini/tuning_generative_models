@@ -142,7 +142,7 @@ study = optuna.create_study(
     sampler=optuna.samplers.TPESampler(seed=0),
 )
 
-study.optimize(objective, n_trials=5, show_progress_bar=True)
+study.optimize(objective, n_trials=100, show_progress_bar=True)
     
 bets_params = study.best_trial.user_attrs['params']
 

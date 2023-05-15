@@ -124,8 +124,8 @@
     },
     "metro": {
         "categorical_columns": ["5", "6", "7", "8"],
-        "mixed_columns": {"y": [0.0], "2": [0.0], "3": [0.0]},
-        "integer_columns": ["0", "4"],
+        "mixed_columns": {"y": [0.0], "2": [0.0]},
+        "integer_columns": ["0", "3", "4"],
         "general_columns": ["1"],
         "problem_type": {"Regression": "y"}
     }
