@@ -82,7 +82,7 @@ def sample_ctabgan(
     with open(parent_dir / "ctabgan.obj", 'rb')  as f:
         synthesizer = pickle.load(f)
         synthesizer.synthesizer.generator = synthesizer.synthesizer.generator.to(device)
-    gen_data = synthesizer.generate_samples(num_samples, seed)
+    gen_data = synthesizer.generate_samples(num_samples, seed)  ## Returns null
 
     print("Sampled data: ", gen_data.head())
     y = gen_data['y'].values

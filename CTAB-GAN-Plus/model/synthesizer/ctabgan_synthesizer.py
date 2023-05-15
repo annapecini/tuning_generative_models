@@ -378,8 +378,9 @@ class CTABGANSynthesizer:
         data_sampler = Sampler(train_data, self.transformer.output_info)
         data_dim = self.transformer.output_dim
         self.cond_generator = Cond(train_data, self.transformer.output_info)
-        		
+
         sides = [4, 8, 16, 24, 32, 64, 128]
+
         col_size_d = data_dim + self.cond_generator.n_opt
         for i in sides:
             if i * i >= col_size_d:
@@ -392,7 +393,6 @@ class CTABGANSynthesizer:
             if i * i >= col_size_g:
                 self.gside = i
                 break
-		
 
         layers_G = determine_layers_gen(self.gside, self.random_dim+self.cond_generator.n_opt, self.num_channels)
         layers_D = determine_layers_disc(self.dside, self.num_channels)
