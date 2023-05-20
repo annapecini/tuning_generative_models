@@ -85,10 +85,10 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
-    # X_num_train = np.load('X_num_test.npy', allow_pickle=True)
+    # main()
+    X_num_train = np.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', dataset_name, 'X_num_test.npy'), allow_pickle=True)
     # X_cat_train = np.load('X_cat_test.npy', allow_pickle=True)
     # y_train = np.load('y_train.npy')
-    # print(X_num_train.shape)
+    print(X_num_train)
     # print(X_cat_train.shape)
 
