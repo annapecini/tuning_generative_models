@@ -14,7 +14,7 @@ def date_to_days(date):
 def main():
     df = pd.read_csv('Metro_Interstate_Traffic_Volume_short.csv')
 
-    df = df.dropna()
+    df = df.dropna(subset=['traffic_volume'])
 
     # Convert date to datetime type
     df["date"] = pd.to_datetime(df["date"], format='%Y-%m-%d %H:%M:%S')
