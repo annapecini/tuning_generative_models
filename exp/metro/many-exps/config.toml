@@ -14,24 +14,26 @@ d_layers = [
     1024,
     1024,
     1024,
-    128,
+    1024,
+    1024,
+    1024,
 ]
 dropout = 0.0
 
 [diffusion_params]
-num_timesteps = 1000
+num_timesteps = 100
 gaussian_loss_type = "mse"
 scheduler = "cosine"
 
 [train.main]
-steps = 30000
-lr = 1.6902186946374798e-05
+steps = 20000
+lr = 0.0010013672326117124
 weight_decay = 0.0
-batch_size = 512
+batch_size = 4096
 
 [train.T]
 seed = 0
-normalization = "quantile"
+normalization = "minmax"
 num_nan_policy = "__none__"
 cat_nan_policy = "__none__"
 cat_min_frequency = "__none__"
@@ -39,7 +41,7 @@ cat_encoding = "one-hot"
 y_policy = "default"
 
 [sample]
-num_samples = 9147
+num_samples = 2286
 batch_size = 100
 seed = 4
 

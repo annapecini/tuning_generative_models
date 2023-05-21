@@ -29,7 +29,7 @@ batch_size = 100
 
 [train.T]
 seed = 0
-normalization = "quantile"
+normalization = "minmax"
 num_nan_policy = "__none__"
 cat_nan_policy = "__none__"
 cat_min_frequency = "__none__"
