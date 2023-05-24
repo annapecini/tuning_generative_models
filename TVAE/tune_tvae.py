@@ -10,25 +10,26 @@ import optuna
 import lib
 
 
-ds_name = "totalturnover"
+ds_name = "metro"
 prefix = "tvae"
-parent_path = Path(f'exp/{ds_name}/')
+parent_path = Path("exp/metro/")
 
-real_data_path = os.path.join(Path(__file__).parents[1], 'totalturnover.csv')
+real_data_path = os.path.join(Path(__file__).parents[1], 'Metro_Interstate_Traffic_Volume_short.csv')
 
 # os.makedirs(exps_path, exist_ok=True)
 
 def objective(trial):
     data = pd.read_csv(real_data_path, parse_dates=['date'])
+    data = data.dropna(subset=['traffic_volume'])
     # Process real data
-    data['total_turnover'] = data['total_turnover'].apply(lambda x: x / 100)
+    # data['total_turnover'] = data['total_turnover'].apply(lambda x: x / 100)
 
     # Encode holidays in 0/1
-    data['holiday_school'] = data['holiday_school'].fillna(0)
-    data.loc[data['holiday_school'] != 0, 'holiday_school'] = 1
+    # data['holiday_school'] = data['holiday_school'].fillna(0)
+    # data.loc[data['holiday_school'] != 0, 'holiday_school'] = 1
 
-    data['holiday_public'] = data['holiday_public'].fillna(0)
-    data.loc[data['holiday_public'] != 0, 'holiday_public'] = 1
+    # data['holiday_public'] = data['holiday_public'].fillna(0)
+    # data.loc[data['holiday_public'] != 0, 'holiday_public'] = 1
 
     # Hyperparameters
     embedding_dim = trial.suggest_categorical("embedding_dim", [128, 256, 512])
@@ -39,17 +40,14 @@ def objective(trial):
     epochs = trial.suggest_categorical("epochs", [300, 700, 1000, 2000])
 
     field_transformers = {"date": UnixTimestampEncoder(),
-        "total_turnover": FloatFormatter(),
-        "whi_temp": FloatFormatter(),
-        "whi_temp_min": FloatFormatter(),
-        "whi_temp_max": FloatFormatter(),
-        "whi_feels_like": FloatFormatter(),
-        "whi_pressure": FloatFormatter(),
-        "whi_humidity": FloatFormatter,
-        "whi_clouds": FloatFormatter(),
-        "whi_rain": FloatFormatter(),
-        "holiday_school": OneHotEncoder(),
-        "holiday_public": OneHotEncoder()
+        "cal_holiday": OneHotEncoder(),
+        "weather_temp": FloatFormatter(),
+        "weather_rain_1h": FloatFormatter(),
+        "weather_snow_1h": FloatFormatter(),
+        "weather_clouds_all": FloatFormatter(),
+        "weather_main": OneHotEncoder(),
+        "weather_description": OneHotEncoder(),
+        "traffic_volume": FloatFormatter()
     }
 
     trial.set_user_attr("embedding_dim", embedding_dim)
@@ -75,12 +73,12 @@ def objective(trial):
 
 
 study = optuna.create_study(direction="maximize")
-study.optimize(objective, n_trials=50, show_progress_bar=True)
+study.optimize(objective, n_trials=100, show_progress_bar=True)
 best_trial = study.best_trial
 
-os.makedirs(parent_path / f'{prefix}_best', exist_ok=True)
-lib.dump_json(optuna.importance.get_param_importances(study), parent_path / f'{prefix}_best/importance.json')
-lib.dump_json(best_trial.user_attrs, parent_path / f'{prefix}_best/parameters.json')
+os.makedirs(parent_path / 'tvae_best', exist_ok=True)
+lib.dump_json(optuna.importance.get_param_importances(study), parent_path / 'tvae_best/importance.json')
+lib.dump_json(best_trial.user_attrs, parent_path / 'tvae_best/parameters.json')
 
 # print(best_trial)
 print(best_trial.user_attrs)
