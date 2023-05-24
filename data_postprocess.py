@@ -21,7 +21,7 @@ def main():
     # print(df_num.nunique())
 
     # Convert number of days to date
-    df_num["date"] = pd.to_datetime(df_num["date"], unit="d")
+    df_num["date"] = pd.to_datetime(df_num["date"], unit="d", errors='coerce')
 
     # Read X_cat
     df_cat = pd.DataFrame(X_cat_train, columns=['cat_holiday',
@@ -59,7 +59,7 @@ def main():
     df = df[column_order]
 
     # Save dataframe as csv
-    df.to_csv(os.path.join(Path(__file__).parents[0], 'exp', 'metro', 'ddpm_tune_best', 'synthetic_ddpm_metro.csv'), index=False)
+    df.to_csv(os.path.join(Path(__file__).parents[0], 'exp', 'metro', 'ddpm_tune_best', 'synthetic_ddpm_metro_minmax.csv'), index=False)
 
 
 if __name__ == '__main__':
