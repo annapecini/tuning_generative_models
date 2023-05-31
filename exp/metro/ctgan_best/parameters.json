@@ -1,0 +1,26 @@
+{
+    "embedding_dim": 256,
+    "generator_dim": [
+        64,
+        64,
+        64,
+        64,
+        64,
+        64,
+        64
+    ],
+    "discriminator_dim": [
+        512,
+        512,
+        512,
+        512,
+        512,
+        512
+    ],
+    "generator_lr": 0.0006,
+    "discriminator_lr": 0.0004,
+    "generator_decay": 9e-06,
+    "discriminator_decay": 1.7e-05,
+    "batch_size": 100,
+    "epochs": 3
+}

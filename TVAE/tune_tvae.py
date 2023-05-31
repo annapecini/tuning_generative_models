@@ -10,17 +10,17 @@ import optuna
 import lib
 
 
-ds_name = "metro"
+ds_name = "nike"
 prefix = "tvae"
-parent_path = Path("exp/metro/")
+parent_path = Path("exp/nike/")
 
-real_data_path = os.path.join(Path(__file__).parents[1], 'Metro_Interstate_Traffic_Volume_short.csv')
+real_data_path = os.path.join(Path(__file__).parents[1], 'nike_sales_short.csv')
 
 # os.makedirs(exps_path, exist_ok=True)
 
 def objective(trial):
     data = pd.read_csv(real_data_path, parse_dates=['date'])
-    data = data.dropna(subset=['traffic_volume'])
+    data = data.dropna(subset=['value'])
     # Process real data
     # data['total_turnover'] = data['total_turnover'].apply(lambda x: x / 100)
 
@@ -39,15 +39,21 @@ def objective(trial):
     batch_size = trial.suggest_categorical("batch_size", [100, 200, 500])
     epochs = trial.suggest_categorical("epochs", [300, 700, 1000, 2000])
 
-    field_transformers = {"date": UnixTimestampEncoder(),
-        "cal_holiday": OneHotEncoder(),
-        "weather_temp": FloatFormatter(),
-        "weather_rain_1h": FloatFormatter(),
-        "weather_snow_1h": FloatFormatter(),
-        "weather_clouds_all": FloatFormatter(),
-        "weather_main": OneHotEncoder(),
-        "weather_description": OneHotEncoder(),
-        "traffic_volume": FloatFormatter()
+    # field_transformers = {"date": UnixTimestampEncoder(),
+    #    "cal_holiday": OneHotEncoder(),
+    #    "weather_temp": FloatFormatter(),
+    #    "weather_rain_1h": FloatFormatter(),
+    #    "weather_snow_1h": FloatFormatter(),
+    #    "weather_clouds_all": FloatFormatter(),
+    #    "weather_main": OneHotEncoder(),
+    #    "weather_description": OneHotEncoder(),
+    #    "traffic_volume": FloatFormatter()
+    #}
+    field_transformers = {
+            "date": UnixTimestampEncoder(),
+            "value": FloatFormatter(),
+            "GPD_per_capita": FloatFormatter(),
+            "eu_prod_index": FloatFormatter()
     }
 
     trial.set_user_attr("embedding_dim", embedding_dim)
@@ -69,6 +75,7 @@ def objective(trial):
     model.fit(data)
 
     new_data = model.sample(num_rows=len(data))
+    print(new_data.head())
     return evaluate(new_data, data)
 
 

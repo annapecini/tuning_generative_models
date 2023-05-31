@@ -1,0 +1,13 @@
+{
+    "g_layers": 0.2105263157894737,
+    "d_layers": 0.1842105263157895,
+    "discriminator_lr": 0.15789473684210528,
+    "generator_decay": 0.13157894736842107,
+    "g_dims": 0.13157894736842107,
+    "generator_lr": 0.10526315789473685,
+    "discriminator_decay": 0.07894736842105264,
+    "epochs": 0.0,
+    "embedding_dim": 0.0,
+    "d_dims": 0.0,
+    "batch_size": 0.0
+}

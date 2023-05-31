@@ -123,10 +123,10 @@
         "problem_type": {"Regression": "y"}
     },
     "metro": {
-        "categorical_columns": ["5", "6", "7", "8"],
-        "mixed_columns": {"y": [0.0]},
+        "categorical_columns": ["3", "5", "6", "7", "8"],
+        "mixed_columns": {},
         "integer_columns": ["0", "4"],
-        "general_columns": ["1", "2", "3"],
+        "general_columns": ["1", "2", "y"],
         "problem_type": {"Regression": "y"}
     }
 }

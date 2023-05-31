@@ -123,6 +123,8 @@ class DataPrep(object):
         if self.integer_columns:
             for column in self.integer_columns:
                 df_sample[column]= (np.round(df_sample[column].values))
+                # I added the following line
+                # df_sample = df_sample.dropna(subset=[column])
                 df_sample[column] = df_sample[column].astype(int)
 
         df_sample.replace(-9999999, np.nan,inplace=True)

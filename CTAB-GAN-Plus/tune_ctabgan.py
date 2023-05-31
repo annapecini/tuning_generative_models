@@ -55,7 +55,8 @@ def objective(trial):
 
     # steps = trial.suggest_categorical('steps', [1000])
 
-    num_samples = int(train_size * (2 ** trial.suggest_int('frac_samples', -2, 3)))
+    # num_samples = int(train_size * (2 ** trial.suggest_int('frac_samples', -2, 3)))
+    num_samples = 1000
 
     train_params = {
         "lr": lr,
